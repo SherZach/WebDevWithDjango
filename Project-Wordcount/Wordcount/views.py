@@ -1,15 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 import operator
+import string
 
 def home(request):
     return render(request, 'home.html')
 
 def count(request):
     fulltext = request.GET['fulltext']
-    # print(fulltext)
+    
+    # clean up text so it only has words
+    fulltext_clean = ''.join([char for char in fulltext if char not in string.punctuation])
+
     word_dictionary = {}
-    word_list = fulltext.upper().split()
+    word_list = fulltext_clean.upper().split()
+
+    # count each occurence of each word in from the fulltext (word_list)
     for word in word_list:
         if word in word_dictionary:
             # Increase count of word
